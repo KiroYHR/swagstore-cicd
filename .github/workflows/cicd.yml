@@ -1,0 +1,35 @@
+name: SwagStore CI/CD Workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+        # Chỉ định đường dẫn chứa file package.json vì dự án nằm trong thư mục con
+        cache-dependency-path: './swagstore - Student/package.json'
+
+    - name: Install dependencies
+      # Chuyển vào thư mục con trước khi cài đặt thư viện
+      run: |
+        cd "swagstore - Student"
+        npm install
+
+    - name: Run Unit Tests with Jest
+      # Chuyển vào thư mục con trước khi chạy lệnh test
+      run: |
+        cd "swagstore - Student"
+        npm test
